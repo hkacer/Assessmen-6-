@@ -5,6 +5,7 @@ const cors=require('cors')
 const {bots, playerRecord} = require('./data')
 const {shuffleArray} = require('./utils')
 require('dotenv').config()
+const {ROLLBAR_TOKEN}=process.env
 
 app.use(express.json())
 app.use(cors())
@@ -13,14 +14,14 @@ app.use(cors())
 // include and initialize the rollbar library with your access token
 var Rollbar = require('rollbar')
 var rollbar = new Rollbar({
-  accessToken: ROLLBAR_TOKEN,
+  accessToken:ROLLBAR_TOKEN,
   captureUncaught: true,
   captureUnhandledRejections: true,
 })
 
 // record a generic message and send it to Rollbar
 rollbar.log('Hello world!')
-app.use(express.static('public'))
+app.use(express.static(`${__dirname}/public`))
 
 app.get('/', function(req,res) {
     rollbar.info('someone visited your website')
